@@ -1,3 +1,5 @@
+#pragma once
+
 #include <gzip/config.hpp>
 
 // zlib
