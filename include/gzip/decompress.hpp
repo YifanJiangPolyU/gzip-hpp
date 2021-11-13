@@ -15,10 +15,11 @@ namespace gzip {
 class Decompressor
 {
     std::size_t max_;
+    int window_bits;
 
   public:
-    Decompressor(std::size_t max_bytes = 1000000000) // by default refuse operation if compressed data is > 1GB
-        : max_(max_bytes)
+    Decompressor(int wbits = 15 + 32, std::size_t max_bytes = 1000000000) // by default refuse operation if compressed data is > 1GB
+        : max_(max_bytes), window_bits(wbits)
     {
     }
 
@@ -43,7 +44,6 @@ class Decompressor
         //  8 to 15 for zlib
         // (8 to 15) + 16 for gzip
         // (8 to 15) + 32 to automatically detect gzip/zlib header
-        constexpr int window_bits = 15 + 32; // auto with windowbits of 15
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wold-style-cast"
