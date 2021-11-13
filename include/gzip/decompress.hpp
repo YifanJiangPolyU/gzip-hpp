@@ -96,9 +96,9 @@ class Decompressor
     }
 };
 
-inline std::string decompress(const char* data, std::size_t size)
+inline std::string decompress(const char* data, std::size_t size, int wbits = 15+16)
 {
-    Decompressor decomp;
+    Decompressor decomp(wbits);
     std::string output;
     decomp.decompress(output, data, size);
     return output;

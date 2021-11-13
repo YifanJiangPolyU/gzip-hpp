@@ -15,12 +15,15 @@ namespace gzip {
 class Compressor
 {
     std::size_t max_;
+    int window_bits;
     int level_;
 
   public:
-    Compressor(int level = Z_DEFAULT_COMPRESSION,
+    Compressor(int wbits = 15 + 16,
+                int level = Z_DEFAULT_COMPRESSION,
                std::size_t max_bytes = 2000000000) // by default refuse operation if uncompressed data is > 2GB
         : max_(max_bytes),
+          window_bits(wbits),
           level_(level)
     {
     }
@@ -58,7 +61,6 @@ class Compressor
         //  8 to 15 for zlib
         // (8 to 15) + 16 for gzip
         // (8 to 15) + 32 to automatically detect gzip/zlib header (decompression/inflate only)
-        constexpr int window_bits = 15 + 16; // gzip with windowbits of 15
 
         constexpr int mem_level = 8;
         // The memory requirements for deflate are (in bytes):
@@ -104,9 +106,10 @@ class Compressor
 
 inline std::string compress(const char* data,
                             std::size_t size,
+                            int wbits = 15 + 16,
                             int level = Z_DEFAULT_COMPRESSION)
 {
-    Compressor comp(level);
+    Compressor comp(wbits, level);
     std::string output;
     comp.compress(output, data, size);
     return output;
